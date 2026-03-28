@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding and Subtracting Fractions - Interactive Lesson</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            border-radius: 25px;
+            height: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #00f260, #0575e6);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 25px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .section h2 {
+            color: #5a4fcf;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .icon {
+            font-size: 2rem;
+        }
+
+        .content-box {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #5a4fcf;
+        }
+
+        .fraction-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            font-size: 2rem;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            min-width: 80px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .fraction .numerator {
+            border-bottom: 3px solid white;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .fraction .denominator {
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .operator {
+            font-size: 2.5rem;
+            color: #5a4fcf;
+            font-weight: bold;
+        }
+
+        .visual-bar {
+            display: flex;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .bar-segment {
+            transition: all 0.3s ease;
+        }
+
+        .bar-filled-1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .bar-filled-2 {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .bar-empty {
+            background: #e0e0e0;
+        }
+
+        .interactive-area {
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .step.completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .quiz-container {
+            text-align: center;
+        }
+
+        .quiz-question {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .option-btn {
+            padding: 20px;
+            font-size: 1.3rem;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .option-btn:hover {
+            border-color: #5a4fcf;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(90, 79, 207, 0.3);
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .option-btn.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .feedback.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4CAF50;
+        }
+
+        .feedback.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .key-point {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ff9800;
+        }
+
+        .key-point h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fraction-builder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .builder-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .input-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+
+        .input-fraction input {
+            width: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: none;
+            outline: none;
+            background: transparent;
+        }
+
+        .input-fraction .line {
+            width: 100%;
+            height: 3px;
+            background: #333;
+            margin: 5px 0;
+        }
+
+        .circle-visual {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .circle-container {
+            text-align: center;
+        }
+
+        .circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto 10px;
+            overflow: hidden;
+            border: 3px solid #333;
+        }
+
+        .circle-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+        }
+
+        .activity-score {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .example-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-by-step {
+            counter-reset: step-counter;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            color: #5a4fcf;
+            margin-bottom: 8px;
+        }
+
+        .drag-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .drag-item {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            cursor: grab;
+            font-size: 1.2rem;
+            font-weight: bold;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+
+        .drop-zone {
+            min-width: 100px;
+            min-height: 60px;
+            border: 3px dashed #5a4fcf;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.hover {
+            background: rgba(90, 79, 207, 0.1);
+            border-style: solid;
+        }
+
+        .drop-zone.filled {
+            border-style: solid;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .fraction-display {
+                font-size: 1.5rem;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧮 Adding & Subtracting Fractions</h1>
+            <p>Learn how to work with fractions step by step!</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Section 1 of 5</p>
+        </header>
+
+        <!-- Section 1: Introduction -->
+        <div class="section" id="section1">
+            <h2><span class="icon">📖</span> What You'll Learn</h2>
+            
+            <div class="content-box">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    In this lesson, you'll discover how to <strong>add</strong> and <strong>subtract</strong> fractions. 
+                    We'll start with fractions that have the <strong>same denominator</strong>, then move on to fractions 
+                    with <strong>different denominators</strong>.
+                </p>
+            </div>
+
+            <div class="key-point">
+                <h3>💡 Remember</h3>
+                <p>A fraction has two parts:</p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li><strong>Numerator</strong> (top number) - tells us how many parts we have</li>
+                    <li><strong>Denominator</strong> (bottom number) - tells us the total number of equal parts</li>
+                </ul>
+            </div>
+
+            <div class="fraction-display">
+                <div class="fraction">
+                    <span class="numerator">3</span>
+                    <span class="denominator">4</span>
+                </div>
+                <span style="color: #666; font-size: 1rem;">← This means 3 out of 4 equal parts</span>
+            </div>
+
+            <div class="navigation">
+                <div></div>
+                <button class="btn btn-primary" onclick="nextSection(2)">Let's Begin! →</button>
+            </div>
+        </div>
+
+        <!-- Section 2: Same Denominators -->
+        <div class="section hidden" id="section2">
+            <h2><span class="icon">✨</span> Adding Fractions with Same Denominators</h2>
+
+            <div class="content-box">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    When fractions have the <strong>same denominator</strong>, adding them is easy! 
+                    You simply <strong>add the numerators</strong> and keep the denominator the same.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h3 style="color: #5a4fcf; margin-bottom: 20px;">📝 Example: Adding 2/6 + 3/6</h3>
+                
+                <div class="fraction-display">
+                    <div class="fraction">
+                        <span class="numerator">2</span>
+                        <span class="denominator">6</span>
+                    </div>
+                    <span class="operator">+</span>
+                    <div class="fraction">
+                        <span class="numerator">3</span>
+                        <span class="denominator">6</span>
+                    </div>
+                    <span class="operator">=</span>
+                    <div class="fraction" style="background: linear-gradient(135deg, #4CAF50, #45a049);">
+                        <span class="numerator">5</span>
+                        <span class="denominator">6</span>
+                    </div>
+                </div>
+
+                <p style="text-align: center; color: #666; margin-top: 15px;">
+                    2 + 3 = 5, so the answer is 5/6
+                </p>
+
+                <h4 style="margin: 25px 0 15px; color: #5a4fcf;">Visual Representation:</h4>
+                
+                <div style="max-width: 400px; margin: 0 auto;">
+                    <p style="margin-bottom: 5px;">2/6 (two parts):</p>
+                    <div class="visual-bar">
+                        <div class="bar-segment bar-filled-1" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                    </div>
+
+                    <p style="margin: 15px 0 5px;">3/6 (three parts):</p>
+                    <div class="visual-bar">
+                        <div class="bar-segment bar-filled-2" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-2" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-2" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                    </div>
+
+                    <p style="margin: 15px 0 5px;"><strong>Combined = 5/6:</strong></p>
+                    <div class="visual-bar">
+                        <div class="bar-segment bar-filled-1" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-2" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-2" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-filled-2" style="width: 16.66%"></div>
+                        <div class="bar-segment bar-empty" style="width: 16.66%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-point">
+                <h3>🔑 Key Rule</h3>
+                <p>When denominators are the same: <strong>Add the numerators, keep the denominator!</strong></p>
+            </div>
+
+            <div class="interactive-area">
+                <h3 style="text-align: center; margin-bottom: 20px;">🎯 Quick Practice</h3>
+                <div class="quiz-container">
+                    <div class="quiz-question">
+                        What is <strong>1/8 + 4/8</strong>?
+                    </div>
+                    <div class="options" id="quiz1Options">
+                        <button class="option-btn" onclick="checkAnswer(1, '5/16', false)">5/16</button>
+                        <button class="option-btn" onclick="checkAnswer(1, '5/8', true)">5/8</button>
+                        <button class="option-btn" onclick="checkAnswer(1, '4/8', false)">4/8</button>
+                        <button class="option-btn" onclick="checkAnswer(1, '6/8', false)">6/8</button>
+                    </div>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="nextSection(1)">← Back</button>
+                <button class="btn btn-primary" onclick="nextSection(3)">Continue →</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Different Denominators -->
+        <div class="section hidden" id="section3">
+            <h2><span class="icon">🔄</span> Different Denominators</h2>
+
+            <div class="content-box">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    When fractions have <strong>different denominators</strong>, you need to find 
+                    <strong>equivalent fractions</strong> with a <strong>common denominator</strong> first.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h3 style="color: #5a4fcf; margin-bottom: 20px;">📝 Example: Adding 1/2 + 1/3</h3>
+
+                <div class="step-by-step">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Find a Common Denominator</h4>
+                            <p>Find a number that both 2 and 3 divide into evenly. The smallest is <strong>6</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Convert 1/2 to sixths</h4>
+                            <p>Multiply both numerator and denominator by 3:</p>
+                            <div class="fraction-display" style="font-size: 1.5rem; margin: 10px 0;">
+                                <div class="fraction" style="padding: 10px 15px;">
+                                    <span class="numerator">1 × 3</span>
+                                    <span class="denominator">2 × 3</span>
+                                </div>
+                                <span class="operator">=</span>
+                                <div class="fraction" style="padding: 10px 15px; background: linear-gradient(135deg, #4CAF50, #45a049);">
+                                    <span class="numerator">3</span>
+                                    <span class="denominator">6</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Convert 1/3 to sixths</h4>
+                            <p>Multiply both numerator and denominator by 2:</p>
+                            <div class="fraction-display" style="font-size: 1.5rem; margin: 10px 0;">
+                                <div class="fraction" style="padding: 10px 15px;">
+                                    <span class="numerator">1 × 2</span>
+                                    <span class="denominator">3 × 2</span>
+                                </div>
+                                <span class="operator">=</span>
+                                <div class="fraction" style="padding: 10px 15px; background: linear-gradient(135deg, #4CAF50, #45a049);">
+                                    <span class="numerator">2</span>
+                                    <span class="denominator">6</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Add the fractions</h4>
+                            <p>Now both fractions have the same denominator!</p>
+                            <div class="fraction-display" style="font-size: 1.5rem; margin: 10px 0;">
+                                <div class="fraction" style="padding: 10px 15px;">
+                                    <span class="numerator">3</span>
+                                    <span class="denominator">6</span>
+                                </div>
+                                <span class="operator">+</span>
+                                <div class="fraction" style="padding: 10px 15px;">
+                                    <span class="numerator">2</span>
+                                    <span class="denominator">6</span>
+                                </div>
+                                <span class="operator">=</span>
+                                <div class="fraction" style="padding: 10px 15px; background: linear-gradient(135deg, #ff6b6b, #ee5a5a);">
+                                    <span class="numerator">5</span>
+                                    <span class="denominator">6</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-point">
+                <h3>🔑 Key Steps</h3>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li>Find a common denominator (a number both denominators divide into)</li>
+                    <li>Convert each fraction to an equivalent fraction with that denominator</li>
+                    <li>Add the numerators, keep the common denominator</li>
+                </ol>
+            </div>
+
+            <div class="interactive-area">
+                <h3 style="text-align: center; margin-bottom: 20px;">🎯 Your Turn!</h3>
+                <div class="quiz-container">
+                    <div class="quiz-question">
+                        What is the <strong>common denominator</strong> for 1/4 + 1/2?
+                    </div>
+                    <div class="options" id="quiz2Options">
+                        <button class="option-btn" onclick="checkAnswer(2, '6', false)">6</button>
+                        <button class="option-btn" onclick="checkAnswer(2, '4', true)">4</button>
+                        <button class="option-btn" onclick="checkAnswer(2, '8', false)">8</button>
+                        <button class="option-btn" onclick="checkAnswer(2, '2', false)">2</button>
+                    </div>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="nextSection(2)">← Back</button>
+                <button class="btn btn-primary" onclick="nextSection(4)">Continue →</button>
+            </div>
+        </div>
+
+        <!-- Section 4: Subtracting Fractions -->
+        <div class="section hidden" id="section4">
+            <h2><span class="icon">➖</span> Subtracting Fractions</h2>
+
+            <div class="content-box">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Subtracting fractions works the same way as adding! If denominators are different, 
+                    find a common denominator first. Then <strong>subtract the numerators</strong>.
+                </p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('same')">Same Denominators</button>
+                <button class="tab" onclick="showTab('different')">Different Denominators</button>
+            </div>
+
+            <div id="tabSame" class="example-box">
+                <h3 style="color: #5a4fcf; margin-bottom: 20px;">📝 Example: 5/8 - 2/8</h3>
+                
+                <div class="fraction-display">
+                    <div class="fraction">
+                        <span class="numerator">5</span>
+                        <span class="denominator">8</span>
+                    </div>
+                    <span class="operator">−</span>
+                    <div class="fraction">
+                        <span class="numerator">2</span>
+                        <span class="denominator">8</span>
+                    </div>
+                    <span class="operator">=</span>
+                    <div class="fraction" style="background: linear-gradient(135deg, #4CAF50, #45a049);">
+                        <span class="numerator">3</span>
+                        <span class="denominator">8</span>
+                    </div>
+                </div>
+
+                <p style="text-align: center; color: #666;">5 - 2 = 3, denominator stays 8</p>
+
+                <div style="max-width: 400px; margin: 20px auto;">
+                    <p>Start with 5/8:</p>
+                    <div class="visual-bar" id="subBar1">
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                    </div>
+
+                    <p style="margin-top: 15px;">After removing 2/8:</p>
+                    <div class="visual-bar">
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-filled-1" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                        <div class="bar-segment bar-empty" style="width: 12.5%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tabDifferent" class="example-box hidden">
+                <h3 style="color: #5a4fcf; margin-bottom: 20px;">📝 Example: 3/4 - 1/2</h3>
+
+                <div class="step-by-step">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Convert 1/2 to fourths</h4>
+                            <div class="fraction-display" style="font-size: 1.3rem; margin: 10px 0;">
+                                <div class="fraction" style="padding: 8px 12px;">
+                                    <span class="numerator">1 × 2</span>
+                                    <span class="denominator">2 × 2</span>
+                                </div>
+                                <span class="operator">=</span>
+                                <div class="fraction" style="padding: 8px 12px; background: linear-gradient(135deg, #4CAF50, #45a049);">
+                                    <span class="numerator">2</span>
+                                    <span class="denominator">4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Now subtract</h4>
+                            <div class="fraction-display" style="font-size: 1.3rem; margin: 10px 0;">
+                                <div class="fraction" style="padding: 8px 12px;">
+                                    <span class="numerator">3</span>
+                                    <span class="denominator">4</span>
+                                </div>
+                                <span class="operator">−</span>
+                                <div class="fraction" style="padding: 8px 12px;">
+                                    <span class="numerator">2</span>
+                                    <span class="denominator">4</span>
+                                </div>
+                                <span class="operator">=</span>
+                                <div class="fraction" style="padding: 8px 12px; background: linear-gradient(135deg, #ff6b6b, #ee5a5a);">
+                                    <span class="numerator">1</span>
+                                    <span class="denominator">4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-area">
+                <h3 style="text-align: center; margin-bottom: 20px;">🎯 Practice Time!</h3>
+                <div class="quiz-container">
+                    <div class="quiz-question">
+                        What is <strong>7/10 - 3/10</strong>?
+                    </div>
+                    <div class="options" id="quiz3Options">
+                        <button class="option-btn" onclick="checkAnswer(3, '4/10', true)">4/10</button>
+                        <button class="option-btn" onclick="checkAnswer(3, '4/20', false)">4/20</button>
+                        <button class="option-btn" onclick="checkAnswer(3, '10/10', false)">10/10</button>
+                        <button class="option-btn" onclick="checkAnswer(3, '3/10', false)">3/10</button>
+                    </div>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="nextSection(3)">← Back</button>
+                <button class="btn btn-primary" onclick="nextSection(5)">Final Quiz →</button>
+            </div>
+        </div>
+
+        <!-- Section 5: Final Quiz -->
+        <div class="section hidden" id="section5">
+            <h2><span class="icon">🏆</span> Final Challenge</h2>
+
+            <div class="content-box">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Time to test everything you've learned! Answer all questions to complete the lesson.
+                </p>
+            </div>
+
+            <div class="interactive-area" id="finalQuiz">
+                <div class="step-indicator">
+                    <div class="step active" id="q1Step">1</div>
+                    <div class="step" id="q2Step">2</div>
+                    <div class="step" id="q3Step">3</div>
+                    <div class="step" id="q4Step">4</div>
+                    <div class="step" id="q5Step">5</div>
+                </div>
+
+                <!-- Question 1 -->
+                <div class="quiz-container" id="finalQ1">
+                    <div class="quiz-question">
+                        <strong>Question 1:</strong> What is 2/9 + 4/9?
+                    </div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkFinal(1, '6/18', false)">6/18</button>
+                        <button class="option-btn" onclick="checkFinal(1, '6/9', true)">6/9</button>
+                        <button class="option-btn" onclick="checkFinal(1, '2/9', false)">2/9</button>
+                        <button class="option-btn" onclick="checkFinal(1, '8/9', false)">8/9</button>
+                    </div>
+                    <div class="feedback" id="finalFeedback1"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-container hidden" id="finalQ2">
+                    <div class="quiz-question">
+                        <strong>Question 2:</strong> What is 1/4 + 1/2?
+                    </div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkFinal(2, '2/6', false)">2/6</button>
+                        <button class="option-btn" onclick="checkFinal(2, '1/4', false)">1/4</button>
+                        <button class="option-btn" onclick="checkFinal(2, '3/4', true)">3/4</button>
+                        <button class="option-btn" onclick="checkFinal(2, '2/4', false)">2/4</button>
+                    </div>
+                    <div class="feedback" id="finalFeedback2"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-container hidden" id="finalQ3">
+                    <div class="quiz-question">
+                        <strong>Question 3:</strong> What is 5/6 - 1/6?
+                    </div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkFinal(3, '4/6', true)">4/6</button>
+                        <button class="option-btn" onclick="checkFinal(3, '6/6', false)">6/6</button>
+                        <button class="option-btn" onclick="checkFinal(3, '4/12', false)">4/12</button>
+                        <button class="option-btn" onclick="checkFinal(3, '5/6', false)">5/6</button>
+                    </div>
+                    <div class="feedback" id="finalFeedback3"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-container hidden" id="finalQ4">
+                    <div class="quiz-question">
+                        <strong>Question 4:</strong> What is 2/3 + 1/6?
+                    </div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkFinal(4, '3/9', false)">3/9</button>
+                        <button class="option-btn" onclick="checkFinal(4, '5/6', true)">5/6</button>
+                        <button class="option-btn" onclick="checkFinal(4, '3/6', false)">3/6</button>
+                        <button class="option-btn" onclick="checkFinal(4, '1/2', false)">1/2</button>
+                    </div>
+                    <div class="feedback" id="finalFeedback4"></div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-container hidden" id="finalQ5">
+                    <div class="quiz-question">
+                        <strong>Question 5:</strong> What is 3/4 - 1/8?
+                    </div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkFinal(5, '2/4', false)">2/4</button>
+                        <button class="option-btn" onclick="checkFinal(5, '5/8', true)">5/8</button>
+                        <button class="option-btn" onclick="checkFinal(5, '4/8', false)">4/8</button>
+                        <button class="option-btn" onclick="checkFinal(5, '2/8', false)">2/8</button>
+                    </div>
+                    <div class="feedback" id="finalFeedback5"></div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="activity-score hidden" id="results">
+                <h3 style="margin-bottom: 15px;">🎉 Lesson Complete!</h3>
+                <div class="score-display" id="scoreDisplay">0/5</div>
+                <p style="margin-top: 15px;" id="scoreMessage"></p>
+                <button class="btn btn-primary" style="margin-top: 20px;" onclick="restartLesson()">
+                    Start Again 🔄
+                </button>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="nextSection(4)">← Review Lessons</button>
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        let totalSections = 5;
+        let finalScore = 0;
+        let currentFinalQuestion = 1;
+
+        function updateProgress() {
+            const percentage = (currentSection / totalSections) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `Section ${currentSection} of ${totalSections}`;
+        }
+
+        function nextSection(sectionNum) {
+            // Hide all sections
+            for (let i = 1; i <= totalSections; i++) {
+                document.getElementById('section' + i).classList.add('hidden');
+            }
+            
+            // Show target section
+            document.getElementById('section' + sectionNum).classList.remove('hidden');
+            currentSection = sectionNum;
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkAnswer(quizNum, answer, isCorrect) {
+            const options = document.querySelectorAll(`#quiz${quizNum}Options .option-btn`);
+            const feedback = document.getElementById('feedback' + quizNum);
+            
+            options.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === answer) {
+                    btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+                // Find and highlight correct answer if user was wrong
+                if (!isCorrect) {
+                    if (quizNum === 1 && btn.textContent === '5/8') btn.classList.add('correct');
+                    if (quizNum === 2 && btn.textContent === '4') btn.classList.add('correct');
+                    if (quizNum === 3 && btn.textContent === '4/10') btn.classList.add('correct');
+                }
+            });
+            
+            feedback.classList.add('show');
+            if (isCorrect) {
+                feedback.classList.remove('error');
+                feedback.classList.add('success');
+                feedback.innerHTML = '✅ <strong>Correct!</strong> Well done!';
+            } else {
+                feedback.classList.remove('success');
+                feedback.classList.add('error');
+                if (quizNum === 1) {
+                    feedback.innerHTML = '❌ <strong>Not quite.</strong> Remember: add the numerators (1 + 4 = 5) and keep the denominator (8). Answer: 5/8';
+                } else if (quizNum === 2) {
+                    feedback.innerHTML = '❌ <strong>Not quite.</strong> 4 is the smallest number both 4 and 2 divide into. (1/2 = 2/4)';
+                } else if (quizNum === 3) {
+                    feedback.innerHTML = '❌ <strong>Not quite.</strong> Subtract numerators: 7 - 3 = 4. Keep denominator 10. Answer: 4/10';
+                }
+            }
+        }
+
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            document.getElementById('tabSame').classList.add('hidden');
+            document.getElementById('tabDifferent').classList.add('hidden');
+            
+            if (tabName === 'same') {
+                tabs[0].classList.add('active');
+                document.getElementById('tabSame').classList.remove('hidden');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('tabDifferent').classList.remove('hidden');
+            }
+        }
+
+        function checkFinal(qNum, answer, isCorrect) {
+            const container = document.getElementById('finalQ' + qNum);
+            const options = container.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('finalFeedback' + qNum);
+            const step = document.getElementById('q' + qNum + 'Step');
+            
+            options.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === answer) {
+                    btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            // Find and show correct answer
+            const correctAnswers = ['6/9', '3/4', '4/6', '5/6', '5/8'];
+            if (!isCorrect) {
+                options.forEach(btn => {
+                    if (btn.textContent === correctAnswers[qNum - 1]) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+            
+            feedback.classList.add('show');
+            if (isCorrect) {
+                feedback.classList.add('success');
+                feedback.innerHTML = '✅ Correct!';
+                finalScore++;
+                step.classList.add('completed');
+            } else {
+                feedback.classList.add('error');
+                feedback.innerHTML = `❌ The correct answer is <strong>${correctAnswers[qNum - 1]}</strong>`;
+            }
+            
+            // Move to next question after delay
+            setTimeout(() => {
+                if (qNum < 5) {
+                    container.classList.add('hidden');
+                    document.getElementById('finalQ' + (qNum + 1)).classList.remove('hidden');
+                    document.getElementById('q' + (qNum + 1) + 'Step').classList.add('active');
+                } else {
+                    showResults();
+                }
+            }, 1500);
+        }
+
+        function showResults() {
+            document.getElementById('finalQuiz').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('scoreDisplay').textContent = finalScore + '/5';
+            
+            let message = '';
+            if (finalScore === 5) {
+                message = '🌟 Perfect score! You\'re a fractions master!';
+            } else if (finalScore >= 4) {
+                message = '👏 Excellent work! You really understand fractions!';
+            } else if (finalScore >= 3) {
+                message = '👍 Good job! Keep practicing to improve!';
+            } else {
+                message = '💪 Keep going! Review the lessons and try again!';
+            }
+            document.getElementById('scoreMessage').textContent = message;
+        }
+
+        function restartLesson() {
+            // Reset all quiz states
+            finalScore = 0;
+            currentFinalQuestion = 1;
+            
+            // Reset all option buttons
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'incorrect');
+            });
+            
+            // Reset all feedback
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.remove('show', 'success', 'error');
+            });
+            
+            // Reset final quiz steps
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('q' + i + 'Step').classList.remove('active', 'completed');
+                document.getElementById('finalQ' + i).classList.add('hidden');
+            }
+            document.getElementById('q1Step').classList.add('active');
+            document.getElementById('finalQ1').classList.remove('hidden');
+            
+            // Show quiz, hide results
+            document.getElementById('finalQuiz').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            
+            // Go to section 1
+            nextSection(1);
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
